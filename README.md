@@ -23,7 +23,7 @@
 
 ## About Me
 
-- 🔭 **Role**: Frontend Developer & QA Engineer @ [BrainLea](https://brainlea.com)
+- 🔭 **Role**: Frontend Developer & QA Engineer @ [BrainLea (SRS Next Solve LLP)](https://brainlea.com)
 - 🎓 **Education**: B.Tech in ECE (2023–2027) @ Cooch Behar Government Engineering College (MAKAUT)
 - 💡 **Focus**: React.js, TypeScript, Node.js & Full-Stack Web Development
 - 🏆 **Community**: GDSC & CGEC Coding Club member | SIH 2024 Participant
