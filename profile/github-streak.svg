@@ -1,14 +1,14 @@
 <svg
   width="450"
-  height="195"
-  viewBox="0 0 450 195"
+  height="270"
+  viewBox="0 0 450 270"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   role="img"
   aria-labelledby="descStreakId"
 >
   <title id="titleStreakId">Biraj Sarkar's GitHub Streak Stats</title>
-  <desc id="descStreakId">Total Contributions: 1285, Current Streak: 8 days, Longest Streak: 14 days</desc>
+  <desc id="descStreakId">Total Contributions: 1401, Current Streak: 8 days, Longest Streak: 14 days</desc>
   <style>
     .header {
       font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -40,21 +40,21 @@
     x="0.5"
     y="0.5"
     rx="10"
-    height="99%"
+    height="269"
     stroke="#30363d"
     width="449"
     fill="#0d1117"
   />
 
-  <g transform="translate(25, 35)">
+  <g transform="translate(25, 45)">
     <text x="0" y="0" class="header">GitHub Contribution Streak</text>
   </g>
 
-  <g transform="translate(25, 85)">
+  <g transform="translate(25, 125)">
     <!-- Total Contributions Column -->
     <g transform="translate(10, 0)">
       <text x="0" y="0" class="label">Total Contributions</text>
-      <text x="0" y="32" class="val">1285</text>
+      <text x="0" y="32" class="val">1401</text>
     </g>
 
     <!-- Current Streak Column -->

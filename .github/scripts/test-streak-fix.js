@@ -1,8 +1,9 @@
 const https = require('https');
 
-function fetchRecentHTML() {
+function fetchYearHTML(year) {
   return new Promise((resolve) => {
-    https.get('https://github.com/users/Biraj2004/contributions', {
+    const url = `https://github.com/users/Biraj2004/contributions?from=${year}-12-01`;
+    https.get(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
     }, (res) => {
       let body = '';
@@ -41,16 +42,22 @@ function fetchRecentHTML() {
         const days = dates.map(d => ({ date: d, contributionCount: dateCounts[d] }));
         resolve(days);
       });
-    });
+    }).on('error', () => resolve([]));
   });
 }
 
 function calculateStreak(days) {
+  const map = {};
+  days.forEach(d => { map[d.date] = d.contributionCount; });
+  
+  // Exclude future dates beyond today (UTC)
+  const todayStr = new Date().toISOString().split('T')[0];
+  const sortedDates = Object.keys(map).filter(d => d <= todayStr).sort();
+  const sortedDays = sortedDates.map(d => ({ date: d, contributionCount: map[d] }));
+
   let currentStreak = 0;
   let longestStreak = 0;
   let tempStreak = 0;
-
-  const sortedDays = [...days].sort((a, b) => new Date(a.date) - new Date(b.date));
 
   for (let i = 0; i < sortedDays.length; i++) {
     const count = sortedDays[i].contributionCount;
@@ -65,8 +72,8 @@ function calculateStreak(days) {
   }
 
   let idx = sortedDays.length - 1;
-  // If the last day has 0 contributions, skip it (maybe today hasn't ended yet or no commits today yet)
-  if (idx >= 0 && sortedDays[idx].contributionCount === 0) {
+  // If today has 0 contributions so far, check if yesterday had contributions to keep streak active
+  if (idx >= 0 && sortedDays[idx].date === todayStr && sortedDays[idx].contributionCount === 0) {
     idx--;
   }
 
@@ -75,13 +82,19 @@ function calculateStreak(days) {
     idx--;
   }
 
-  return { currentStreak, longestStreak, lastDays: sortedDays.slice(-5) };
+  return { currentStreak, longestStreak, totalDays: sortedDays.length, last5Days: sortedDays.slice(-5) };
 }
 
 async function run() {
-  const days = await fetchRecentHTML();
-  const res = calculateStreak(days);
-  console.log('Streak res:', res);
+  const currentYear = new Date().getFullYear();
+  let allDays = [];
+  for (let yr = 2022; yr <= currentYear; yr++) {
+    const yrDays = await fetchYearHTML(yr);
+    allDays.push(...yrDays);
+  }
+
+  const result = calculateStreak(allDays);
+  console.log('Filtered Streak Result:', result);
 }
 
 run();

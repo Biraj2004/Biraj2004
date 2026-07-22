@@ -1,13 +1,19 @@
 const https = require('https');
 
-function fetchRecentHTML() {
+function fetchYearHTML(year) {
   return new Promise((resolve) => {
-    https.get('https://github.com/users/Biraj2004/contributions', {
+    const url = `https://github.com/users/Biraj2004/contributions?from=${year}-12-01`;
+    https.get(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
     }, (res) => {
       let body = '';
       res.on('data', c => body += c);
       res.on('end', () => {
+        // Parse tooltips or contribution total text
+        const match = body.match(/([\d,]+)\s+contributions\s+in\s+(\d{4})/i);
+        const totalYear = match ? parseInt(match[1].replace(/,/g, ''), 10) : 0;
+        
+        // Parse daily counts
         const idToDate = {};
         const tdRegex = /<td[^>]*id="(contribution-day-component-[^"]+)"[^>]*>/g;
         let m;
@@ -39,49 +45,24 @@ function fetchRecentHTML() {
 
         const dates = Object.keys(dateCounts).sort();
         const days = dates.map(d => ({ date: d, contributionCount: dateCounts[d] }));
-        resolve(days);
+
+        resolve({ year, totalYear, days });
       });
-    });
+    }).on('error', () => resolve({ year, totalYear: 0, days: [] }));
   });
 }
 
-function calculateStreak(days) {
-  let currentStreak = 0;
-  let longestStreak = 0;
-  let tempStreak = 0;
-
-  const sortedDays = [...days].sort((a, b) => new Date(a.date) - new Date(b.date));
-
-  for (let i = 0; i < sortedDays.length; i++) {
-    const count = sortedDays[i].contributionCount;
-    if (count > 0) {
-      tempStreak++;
-      if (tempStreak > longestStreak) {
-        longestStreak = tempStreak;
-      }
-    } else {
-      tempStreak = 0;
-    }
-  }
-
-  let idx = sortedDays.length - 1;
-  // If the last day has 0 contributions, skip it (maybe today hasn't ended yet or no commits today yet)
-  if (idx >= 0 && sortedDays[idx].contributionCount === 0) {
-    idx--;
-  }
-
-  while (idx >= 0 && sortedDays[idx].contributionCount > 0) {
-    currentStreak++;
-    idx--;
-  }
-
-  return { currentStreak, longestStreak, lastDays: sortedDays.slice(-5) };
-}
-
 async function run() {
-  const days = await fetchRecentHTML();
-  const res = calculateStreak(days);
-  console.log('Streak res:', res);
+  const currentYear = new Date().getFullYear();
+  let allTimeContributions = 0;
+
+  for (let yr = 2022; yr <= currentYear; yr++) {
+    const res = await fetchYearHTML(yr);
+    console.log(`Year ${yr}: Total = ${res.totalYear}, Days parsed = ${res.days.length}`);
+    allTimeContributions += res.totalYear;
+  }
+
+  console.log(`\nTOTAL ALL-TIME CONTRIBUTIONS: ${allTimeContributions}`);
 }
 
 run();

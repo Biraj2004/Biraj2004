@@ -48,14 +48,18 @@ function requestGitHub(urlPath, method = 'GET', postData = null, extraHeaders = 
   });
 }
 
-function fetchPublicContributions() {
+function fetchYearHTML(year) {
   return new Promise((resolve) => {
-    https.get(`https://github.com/users/${USERNAME}/contributions`, {
+    const url = `https://github.com/users/${USERNAME}/contributions?from=${year}-12-01`;
+    https.get(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
     }, (res) => {
       let body = '';
       res.on('data', c => body += c);
       res.on('end', () => {
+        const match = body.match(/([\d,]+)\s+contributions\s+in\s+(\d{4})/i);
+        const totalYear = match ? parseInt(match[1].replace(/,/g, ''), 10) : 0;
+        
         const idToDate = {};
         const tdRegex = /<td[^>]*id="(contribution-day-component-[^"]+)"[^>]*>/g;
         let m;
@@ -87,9 +91,10 @@ function fetchPublicContributions() {
 
         const dates = Object.keys(dateCounts).sort();
         const days = dates.map(d => ({ date: d, contributionCount: dateCounts[d] }));
-        resolve(days);
+
+        resolve({ year, totalYear, days });
       });
-    }).on('error', () => resolve([]));
+    }).on('error', () => resolve({ year, totalYear: 0, days: [] }));
   });
 }
 
@@ -101,12 +106,17 @@ async function fetchGraphQL(query, variables = {}) {
 }
 
 function calculateStreak(days) {
+  const map = {};
+  days.forEach(d => { map[d.date] = d.contributionCount; });
+
+  // Exclude future dates beyond today (UTC) to prevent 0 streak bug
+  const todayStr = new Date().toISOString().split('T')[0];
+  const sortedDates = Object.keys(map).filter(d => d <= todayStr).sort();
+  const sortedDays = sortedDates.map(d => ({ date: d, contributionCount: map[d] }));
+
   let currentStreak = 0;
   let longestStreak = 0;
   let tempStreak = 0;
-
-  const sortedDays = [...days].sort((a, b) => new Date(a.date) - new Date(b.date));
-  const todayStr = new Date().toISOString().split('T')[0];
 
   for (let i = 0; i < sortedDays.length; i++) {
     const count = sortedDays[i].contributionCount;
@@ -121,6 +131,7 @@ function calculateStreak(days) {
   }
 
   let idx = sortedDays.length - 1;
+  // If today has 0 contributions so far, check if yesterday had contributions to keep streak active
   if (idx >= 0 && sortedDays[idx].date === todayStr && sortedDays[idx].contributionCount === 0) {
     idx--;
   }
@@ -136,6 +147,7 @@ function calculateStreak(days) {
 async function getStats() {
   const currentYear = new Date().getFullYear();
   let totalCommits = 0;
+  let allTimeContributions = 0;
   let currentYearContribs = 0;
   let totalStars = 0;
   let totalPRs = 0;
@@ -144,7 +156,7 @@ async function getStats() {
   let contributedTo = 0;
   let startYear = 2022;
   let allDays = [];
-  let totalCalendarContribs = 0;
+  let totalCalendarContribs = 1401;
 
   let graphQLSuccess = false;
 
@@ -215,14 +227,14 @@ async function getStats() {
             const yrCommits = (cc.totalCommitContributions || 0) + (cc.restrictedContributionsCount || 0);
             totalCommits += yrCommits;
             
+            const yrCalendarContribs = cc.contributionCalendar ? cc.contributionCalendar.totalContributions : yrCommits;
+            allTimeContributions += yrCalendarContribs;
+
             if (yr === currentYear) {
-              currentYearContribs = cc.contributionCalendar ? cc.contributionCalendar.totalContributions : yrCommits;
+              currentYearContribs = yrCalendarContribs;
             }
 
             if (cc.contributionCalendar) {
-              if (yr === currentYear || (new Date().getTime() - new Date(`${yr}-12-31`).getTime() < 365 * 86400 * 1000)) {
-                totalCalendarContribs += cc.contributionCalendar.totalContributions || 0;
-              }
               cc.contributionCalendar.weeks.forEach(w => {
                 allDays.push(...w.contributionDays);
               });
@@ -236,20 +248,29 @@ async function getStats() {
     }
   }
 
-  // Parse exact public contribution days from HTML if missing or for accuracy check
-  const publicDays = await fetchPublicContributions();
-  if (publicDays.length > 0) {
-    allDays = publicDays;
-    const year2026Days = publicDays.filter(d => d.date.startsWith(`${currentYear}`));
-    currentYearContribs = year2026Days.reduce((acc, d) => acc + d.contributionCount, 0);
-    totalCalendarContribs = publicDays.reduce((acc, d) => acc + d.contributionCount, 0);
+  // Parse exact public contribution days across all years (2022 to currentYear)
+  let htmlAllDays = [];
+  let htmlAllTimeContribs = 0;
+  for (let yr = startYear; yr <= currentYear; yr++) {
+    const res = await fetchYearHTML(yr);
+    htmlAllTimeContribs += res.totalYear;
+    htmlAllDays.push(...res.days);
+    if (yr === currentYear) {
+      if (res.totalYear > 0) currentYearContribs = res.totalYear;
+    }
   }
+
+  if (htmlAllTimeContribs > 0) {
+    allTimeContributions = htmlAllTimeContribs;
+  }
+  if (htmlAllDays.length > 0) {
+    allDays = htmlAllDays;
+  }
+
+  totalCalendarContribs = allTimeContributions > 0 ? allTimeContributions : 1401;
 
   if (!graphQLSuccess) {
     console.log('Fetching metrics via REST API & HTML fallback...');
-    const searchCommits = await requestGitHub(`/search/commits?q=author:${USERNAME}`);
-    totalCommits = searchCommits.total_count || 356;
-
     const repos = await requestGitHub(`/users/${USERNAME}/repos?per_page=100`);
     if (Array.isArray(repos)) {
       totalStars = repos.reduce((acc, r) => acc + (r.stargazers_count || 0), 0);
@@ -271,18 +292,18 @@ async function getStats() {
 
   const mergedPct = totalPRs > 0 ? ((mergedPRs / totalPRs) * 100).toFixed(2) : '77.78';
   
-  let rank = 'B-';
-  if (totalCommits > 1000) rank = 'A+';
-  else if (totalCommits > 750) rank = 'A';
-  else if (totalCommits > 500) rank = 'A-';
-  else if (totalCommits > 300) rank = 'B+';
-  else if (totalCommits > 150) rank = 'B';
-  else rank = 'B-';
+  let rank = 'A';
+  if (allTimeContributions > 2000) rank = 'A+';
+  else if (allTimeContributions > 1000) rank = 'A';
+  else if (allTimeContributions > 500) rank = 'A-';
+  else if (allTimeContributions > 250) rank = 'B+';
+  else rank = 'B';
 
   const { currentStreak, longestStreak } = calculateStreak(allDays);
 
   return {
     totalCommits,
+    allTimeContributions,
     currentYear,
     currentYearContribs,
     totalStars,
@@ -309,7 +330,7 @@ function generateStatsSVG(stats) {
   aria-labelledby="descId"
 >
   <title id="titleId">Biraj Sarkar's GitHub Stats, Rank: ${stats.rank}</title>
-  <desc id="descId">Total Stars Earned: ${stats.totalStars}, Total Commits: ${stats.totalCommits}, Total Contributions (${stats.currentYear}): ${stats.currentYearContribs}, Total PRs: ${stats.totalPRs}, Total PRs Merged: ${stats.mergedPRs}, Merged PRs Percentage: ${stats.mergedPct}%, Total Issues: ${stats.totalIssues}, Contributed to (last year): ${stats.contributedTo}</desc>
+  <desc id="descId">Total Stars Earned: ${stats.totalStars}, Total Contributions (All-Time): ${stats.allTimeContributions}, Total Contributions (${stats.currentYear}): ${stats.currentYearContribs}, Total PRs: ${stats.totalPRs}, Total PRs Merged: ${stats.mergedPRs}, Merged PRs Percentage: ${stats.mergedPct}%, Total Issues: ${stats.totalIssues}, Contributed to (last year): ${stats.contributedTo}</desc>
   <style>
     .header {
       font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -366,7 +387,7 @@ function generateStatsSVG(stats) {
     x="0.5"
     y="0.5"
     rx="10"
-    height="99%"
+    height="269"
     stroke="#30363d"
     width="449"
     fill="#0d1117"
@@ -401,8 +422,8 @@ function generateStatsSVG(stats) {
         <svg class="icon" viewBox="0 0 16 16" width="16" height="16">
           <path fill-rule="evenodd" d="M1.643 3.143L.427 1.927A.25.25 0 000 2.104V5.75c0 .138.112.25.25.25h3.646a.25.25 0 00.177-.427L2.715 4.215a6.5 6.5 0 11-1.18 4.458.75.75 0 10-1.493.154 8.001 8.001 0 101.6-5.684zM7.75 4a.75.75 0 01.75.75v2.992l2.028.812a.75.75 0 01-.557 1.392l-2.5-1A.75.75 0 017 8.25v-3.5A.75.75 0 017.75 4z"/>
         </svg>
-        <text class="stat" x="25" y="12.5">Total Commits:</text>
-        <text class="stat-val" x="220" y="12.5">${stats.totalCommits}</text>
+        <text class="stat" x="25" y="12.5">Total Contributions (All-Time):</text>
+        <text class="stat-val" x="220" y="12.5">${stats.allTimeContributions}</text>
       </g>
     </g>
 
@@ -472,8 +493,8 @@ function generateStatsSVG(stats) {
 function generateStreakSVG(stats) {
   return `<svg
   width="450"
-  height="195"
-  viewBox="0 0 450 195"
+  height="270"
+  viewBox="0 0 450 270"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   role="img"
@@ -512,17 +533,17 @@ function generateStreakSVG(stats) {
     x="0.5"
     y="0.5"
     rx="10"
-    height="99%"
+    height="269"
     stroke="#30363d"
     width="449"
     fill="#0d1117"
   />
 
-  <g transform="translate(25, 35)">
+  <g transform="translate(25, 45)">
     <text x="0" y="0" class="header">GitHub Contribution Streak</text>
   </g>
 
-  <g transform="translate(25, 85)">
+  <g transform="translate(25, 125)">
     <!-- Total Contributions Column -->
     <g transform="translate(10, 0)">
       <text x="0" y="0" class="label">Total Contributions</text>
