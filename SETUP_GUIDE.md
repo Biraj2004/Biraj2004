@@ -1,13 +1,22 @@
 # Self-Hosted GitHub Profile Engine — Complete Setup Guide
 
-This repository contains a **100% self-hosted, automated profile analytics engine** that generates live vector profile cards ([`profile/github-stats.svg`](file:///e:/01.%20GitHub%20Repo%20Projects/01.%20My%20Portfolio/Biraj2004/profile/github-stats.svg) and [`profile/github-streak.svg`](file:///e:/01.%20GitHub%20Repo%20Projects/01.%20My%20Portfolio/Biraj2004/profile/github-streak.svg)) with private contribution support and zero dependence on third-party servers.
+This repository contains a **100% self-dependent, automated profile analytics engine** that generates live vector profile cards ([`profile/github-stats.svg`](file:///e:/01.%20GitHub%20Repo%20Projects/01.%20My%20Portfolio/Biraj2004/profile/github-stats.svg) and [`profile/github-streak.svg`](file:///e:/01.%20GitHub%20Repo%20Projects/01.%20My%20Portfolio/Biraj2004/profile/github-streak.svg)) directly inside your GitHub Actions workflow with zero external third-party server dependencies.
+
+---
+
+## 100% Self-Dependent Architecture
+
+- **Zero Third-Party External Dependencies**: Does not rely on Vercel, Heroku, or external 3rd-party stats widgets that suffer from rate limiting, outages, or downtime.
+- **Direct GitHub API Integration**: Directly fetches metrics from GitHub's official GraphQL & REST APIs via your secure `PAT_TOKEN`.
+- **Private Contribution Protection**: Computes all-time, yearly, and streak metrics including private repositories without exposing private repo names or code.
+- **Native CDN Performance**: Vector SVG cards are pre-rendered into your repository (`profile/*.svg`), ensuring instant loading with 100% uptime.
 
 ---
 
 ## How It Works
 
 1. **Self-Hosted Generator Script** (`.github/scripts/generate-stats.js`):
-   - Queries GitHub's GraphQL & REST APIs.
+   - Queries GitHub's official GraphQL & REST APIs.
    - Calculates **All-Time Contributions (`1,401`)**, **Current Year Contributions (`931`)**, **Rolling 1-Year Contributions (`1,301`)**, **Current Streak (`8 days`)**, **Longest Streak (`25 days`)**, PRs, Issues, and Stars.
    - Renders custom SVG vector cards matching your signature `#4ade80` emerald green theme.
 
