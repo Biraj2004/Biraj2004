@@ -1,7 +1,7 @@
 <svg
   width="495"
-  height="270"
-  viewBox="0 0 495 270"
+  height="205"
+  viewBox="0 0 495 205"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   role="img"
@@ -24,11 +24,11 @@
       fill: #8b949e;
     }
     .val {
-      font: 800 28px 'Segoe UI', Ubuntu, Sans-Serif;
+      font: 800 26px 'Segoe UI', Ubuntu, Sans-Serif;
       fill: #ffffff;
     }
     .accent-val {
-      font: 800 28px 'Segoe UI', Ubuntu, Sans-Serif;
+      font: 800 26px 'Segoe UI', Ubuntu, Sans-Serif;
       fill: #4ade80;
     }
     .fire-icon {
@@ -44,38 +44,38 @@
     x="0.5"
     y="0.5"
     rx="10"
-    height="269"
+    height="204"
     stroke="#30363d"
     width="494"
     fill="#0d1117"
   />
 
   <!-- Title -->
-  <g transform="translate(25, 45)">
+  <g transform="translate(25, 38)">
     <text x="0" y="0" class="header">GitHub Contribution Streak</text>
   </g>
 
   <!-- Left Stat: Total Contributions (Last 1 Year) -->
   <g transform="translate(95, 0)">
-    <text x="0" y="118" text-anchor="middle" class="label">Total Contributions</text>
-    <text x="0" y="135" text-anchor="middle" class="sublabel">(Last 1 Year)</text>
-    <text x="0" y="180" text-anchor="middle" class="val">1285</text>
+    <text x="0" y="102" text-anchor="middle" class="label">Total Contributions</text>
+    <text x="0" y="118" text-anchor="middle" class="sublabel">(Last 1 Year)</text>
+    <text x="0" y="158" text-anchor="middle" class="val">1285</text>
   </g>
 
   <!-- Middle Stat: Current Streak with Flame Icon ABOVE -->
   <g transform="translate(247.5, 0)">
-    <svg class="fire-icon" x="-18" y="55" viewBox="0 0 16 16" width="36" height="36">
+    <svg class="fire-icon" x="-16" y="46" viewBox="0 0 16 16" width="32" height="32">
       <path d="M8 16c3.314 0 6-2.686 6-6 0-3.314-3-6-4.5-8.5C9 3 8 4.5 8 4.5S7 3 6.5 1.5C5 4 2 6.686 2 10c0 3.314 2.686 6 6 6zm0-2c-2.209 0-4-1.791-4-4 0-1.5 1.5-3.5 2.5-4.8.5.8 1.5 2 1.5 2s1-1.2 1.5-2c1 1.3 2.5 3.3 2.5 4.8 0 2.209-1.791 4-4 4z"/>
     </svg>
-    <text x="0" y="118" text-anchor="middle" class="label">Current Streak</text>
-    <text x="0" y="135" text-anchor="middle" class="sublabel" fill="#4ade80">(Active)</text>
-    <text x="0" y="180" text-anchor="middle" class="accent-val">8 <tspan font-size="16" font-weight="600" fill="#c9d1d9">days</tspan></text>
+    <text x="0" y="102" text-anchor="middle" class="label">Current Streak</text>
+    <text x="0" y="118" text-anchor="middle" class="sublabel" fill="#4ade80">(Active)</text>
+    <text x="0" y="158" text-anchor="middle" class="accent-val">8 <tspan font-size="15" font-weight="600" fill="#c9d1d9">days</tspan></text>
   </g>
 
   <!-- Right Stat: Longest Streak -->
   <g transform="translate(400, 0)">
-    <text x="0" y="118" text-anchor="middle" class="label">Longest Streak</text>
-    <text x="0" y="135" text-anchor="middle" class="sublabel">(All-Time)</text>
-    <text x="0" y="180" text-anchor="middle" class="val">25 <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
+    <text x="0" y="102" text-anchor="middle" class="label">Longest Streak</text>
+    <text x="0" y="118" text-anchor="middle" class="sublabel">(All-Time)</text>
+    <text x="0" y="158" text-anchor="middle" class="val">25 <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
   </g>
 </svg>
