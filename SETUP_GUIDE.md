@@ -20,7 +20,6 @@ This repository contains a **100% self-hosted, automated profile analytics engin
 ## Step-by-Step Setup Guide
 
 ### Step 1: Create & Save Your GitHub `PAT_TOKEN`
-
 To include private repository commits, issues, and PRs in your contribution counts and streak calculations:
 
 1. Go to **GitHub Settings → Developer Settings → Personal Access Tokens → Tokens (classic)**.
@@ -39,7 +38,6 @@ To include private repository commits, issues, and PRs in your contribution coun
 ---
 
 ### Step 2: Enable GitHub Actions Permissions
-
 1. Go to your repository **Settings → Actions → General**.
 2. Scroll down to **Workflow permissions**.
 3. Select **Read and write permissions**.
@@ -49,7 +47,6 @@ To include private repository commits, issues, and PRs in your contribution coun
 ---
 
 ### Step 3: Trigger Initial Workflow Build
-
 1. Go to the **Actions** tab in your repository.
 2. Select **Generate GitHub Profile Stats & Streak** from the left sidebar.
 3. Click **Run workflow → Run workflow**.
@@ -60,14 +57,11 @@ To include private repository commits, issues, and PRs in your contribution coun
 ## Customization & Tech Stack Icons
 
 ### Tech Stack Grid (`README.md`)
-
 The README features 24 skill icons formatted into 3 perfectly balanced rows (8 icons per row):
 
 ```html
 <div align="center">
-  <img
-    src="https://skillicons.dev/icons?i=react,nextjs,ts,js,html,css,tailwind,nodejs,java,androidstudio,kotlin,spring,express,mongodb,postgres,python,cpp,git,github,githubactions,postman,vscode,figma,latex&perline=8"
-  />
+<img src="https://skillicons.dev/icons?i=react,nextjs,ts,js,html,css,tailwind,nodejs,java,androidstudio,kotlin,spring,express,mongodb,postgres,python,cpp,git,github,githubactions,postman,vscode,figma,latex&perline=8" />
 </div>
 ```
 
@@ -94,7 +88,7 @@ The script will generate local copies under `profile/github-stats.svg` and `prof
 
 ## Card Dimension & Layout Specifications
 
-| Card              | SVG File                    | Width   | Height  | Key Metrics Displayed                                                                              |
-| ----------------- | --------------------------- | ------- | ------- | -------------------------------------------------------------------------------------------------- |
-| **GitHub Stats**  | `profile/github-stats.svg`  | `495px` | `270px` | Stars, All-Time Contribs (`1,401`), 2026 Contribs (`931`), PRs, Merged %, Issues, Rank A Badge     |
+| Card | SVG File | Width | Height | Key Metrics Displayed |
+|---|---|---|---|---|
+| **GitHub Stats** | `profile/github-stats.svg` | `495px` | `270px` | Stars, All-Time Contribs (`1,401`), 2026 Contribs (`931`), PRs, Merged %, Issues, Rank A Badge |
 | **GitHub Streak** | `profile/github-streak.svg` | `495px` | `205px` | Hero Flame Badge, 1-Year Contribs (`1,301`), Current Streak (`8 days`), Longest Streak (`25 days`) |
