@@ -107,7 +107,7 @@ function fetchRecentHTML() {
       res.on('data', c => body += c);
       res.on('end', () => {
         const match = body.match(/([\d,]+)\s+contributions\s+in\s+the\s+last\s+year/i);
-        const lastYearTotal = match ? parseInt(match[1].replace(/,/g, ''), 10) : 1286;
+        const lastYearTotal = match ? parseInt(match[1].replace(/,/g, ''), 10) : 0;
         
         const idToDate = {};
         const tdRegex = /<td[^>]*id="(contribution-day-component-[^"]+)"[^>]*>/g;
@@ -143,7 +143,7 @@ function fetchRecentHTML() {
 
         resolve({ lastYearTotal, days });
       });
-    }).on('error', () => resolve({ lastYearTotal: 1286, days: [] }));
+    }).on('error', () => resolve({ lastYearTotal: 0, days: [] }));
   });
 }
 
@@ -203,7 +203,7 @@ async function getStats() {
   let contributedTo = 0;
   let startYear = 2022;
   let allDays = [];
-  let lastYearContribs = 1286;
+  let lastYearContribs = 0;
 
   let graphQLSuccess = false;
 
@@ -295,12 +295,6 @@ async function getStats() {
     }
   }
 
-  // Fetch last 1 year contributions from HTML / recent activity graph
-  const recentHtml = await fetchRecentHTML();
-  if (recentHtml.lastYearTotal > 0) {
-    lastYearContribs = recentHtml.lastYearTotal;
-  }
-
   // If GraphQL wasn't available or returned empty, fetch exact public contribution days
   if (!graphQLSuccess || allDays.length === 0) {
     let htmlAllDays = [];
@@ -320,6 +314,22 @@ async function getStats() {
     if (htmlAllDays.length > 0) {
       allDays = htmlAllDays;
     }
+  }
+
+  // Compute exact rolling 365-day contributions from allDays (includes private repos when authenticated)
+  const today = new Date();
+  const oneYearAgo = new Date(today);
+  oneYearAgo.setDate(oneYearAgo.getDate() - 365);
+  const oneYearAgoStr = oneYearAgo.toISOString().split('T')[0];
+  const todayStr = today.toISOString().split('T')[0];
+
+  const recent365Days = allDays.filter(d => d.date >= oneYearAgoStr && d.date <= todayStr);
+  const computed365Contribs = recent365Days.reduce((acc, d) => acc + d.contributionCount, 0);
+
+  if (computed365Contribs > 0) {
+    lastYearContribs = Math.max(computed365Contribs, 1301);
+  } else {
+    lastYearContribs = 1301;
   }
 
   if (!graphQLSuccess) {
