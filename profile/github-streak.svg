@@ -8,7 +8,7 @@
   aria-labelledby="descStreakId"
 >
   <title id="titleStreakId">Biraj Sarkar's GitHub Streak Stats</title>
-  <desc id="descStreakId">Total Contributions: 366, Current Streak: 0 days, Longest Streak: 0 days</desc>
+  <desc id="descStreakId">Total Contributions: 1398, Current Streak: 0 days, Longest Streak: 25 days</desc>
   <style>
     .header {
       font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -54,7 +54,7 @@
     <!-- Total Contributions Column -->
     <g transform="translate(10, 0)">
       <text x="0" y="0" class="label">Total Contributions</text>
-      <text x="0" y="32" class="val">366</text>
+      <text x="0" y="32" class="val">1398</text>
     </g>
 
     <!-- Current Streak Column -->
@@ -69,7 +69,7 @@
     <!-- Longest Streak Column -->
     <g transform="translate(290, 0)">
       <text x="0" y="0" class="label">Longest Streak</text>
-      <text x="0" y="32" class="val">0 <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
+      <text x="0" y="32" class="val">25 <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
     </g>
   </g>
 </svg>
