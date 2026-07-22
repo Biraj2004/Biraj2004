@@ -1,22 +1,13 @@
 # Self-Hosted GitHub Profile Engine — Complete Setup Guide
 
-This repository contains a **100% self-dependent, automated profile analytics engine** that generates live vector profile cards ([`profile/github-stats.svg`](file:///e:/01.%20GitHub%20Repo%20Projects/01.%20My%20Portfolio/Biraj2004/profile/github-stats.svg) and [`profile/github-streak.svg`](file:///e:/01.%20GitHub%20Repo%20Projects/01.%20My%20Portfolio/Biraj2004/profile/github-streak.svg)) directly inside your GitHub Actions workflow with zero external third-party server dependencies.
-
----
-
-## 100% Self-Dependent Architecture
-
-- **Zero Third-Party External Dependencies**: Does not rely on Vercel, Heroku, or external 3rd-party stats widgets that suffer from rate limiting, outages, or downtime.
-- **Direct GitHub API Integration**: Directly fetches metrics from GitHub's official GraphQL & REST APIs via your secure `PAT_TOKEN`.
-- **Private Contribution Protection**: Computes all-time, yearly, and streak metrics including private repositories without exposing private repo names or code.
-- **Native CDN Performance**: Vector SVG cards are pre-rendered into your repository (`profile/*.svg`), ensuring instant loading with 100% uptime.
+This repository contains a **100% self-hosted, automated profile analytics engine** that generates live vector profile cards ([`profile/github-stats.svg`](file:///e:/01.%20GitHub%20Repo%20Projects/01.%20My%20Portfolio/Biraj2004/profile/github-stats.svg) and [`profile/github-streak.svg`](file:///e:/01.%20GitHub%20Repo%20Projects/01.%20My%20Portfolio/Biraj2004/profile/github-streak.svg)) with private contribution support and zero dependence on third-party servers.
 
 ---
 
 ## How It Works
 
 1. **Self-Hosted Generator Script** (`.github/scripts/generate-stats.js`):
-   - Queries GitHub's official GraphQL & REST APIs.
+   - Queries GitHub's GraphQL & REST APIs.
    - Calculates **All-Time Contributions (`1,401`)**, **Current Year Contributions (`931`)**, **Rolling 1-Year Contributions (`1,301`)**, **Current Streak (`8 days`)**, **Longest Streak (`25 days`)**, PRs, Issues, and Stars.
    - Renders custom SVG vector cards matching your signature `#4ade80` emerald green theme.
 
@@ -29,6 +20,7 @@ This repository contains a **100% self-dependent, automated profile analytics en
 ## Step-by-Step Setup Guide
 
 ### Step 1: Create & Save Your GitHub `PAT_TOKEN`
+
 To include private repository commits, issues, and PRs in your contribution counts and streak calculations:
 
 1. Go to **GitHub Settings → Developer Settings → Personal Access Tokens → Tokens (classic)**.
@@ -47,6 +39,7 @@ To include private repository commits, issues, and PRs in your contribution coun
 ---
 
 ### Step 2: Enable GitHub Actions Permissions
+
 1. Go to your repository **Settings → Actions → General**.
 2. Scroll down to **Workflow permissions**.
 3. Select **Read and write permissions**.
@@ -56,6 +49,7 @@ To include private repository commits, issues, and PRs in your contribution coun
 ---
 
 ### Step 3: Trigger Initial Workflow Build
+
 1. Go to the **Actions** tab in your repository.
 2. Select **Generate GitHub Profile Stats & Streak** from the left sidebar.
 3. Click **Run workflow → Run workflow**.
@@ -66,11 +60,14 @@ To include private repository commits, issues, and PRs in your contribution coun
 ## Customization & Tech Stack Icons
 
 ### Tech Stack Grid (`README.md`)
+
 The README features 24 skill icons formatted into 3 perfectly balanced rows (8 icons per row):
 
 ```html
 <div align="center">
-<img src="https://skillicons.dev/icons?i=react,nextjs,ts,js,html,css,tailwind,nodejs,java,androidstudio,kotlin,spring,express,mongodb,postgres,python,cpp,git,github,githubactions,postman,vscode,figma,latex&perline=8" />
+  <img
+    src="https://skillicons.dev/icons?i=react,nextjs,ts,js,html,css,tailwind,nodejs,java,androidstudio,kotlin,spring,express,mongodb,postgres,python,cpp,git,github,githubactions,postman,vscode,figma,latex&perline=8"
+  />
 </div>
 ```
 
@@ -97,7 +94,7 @@ The script will generate local copies under `profile/github-stats.svg` and `prof
 
 ## Card Dimension & Layout Specifications
 
-| Card | SVG File | Width | Height | Key Metrics Displayed |
-|---|---|---|---|---|
-| **GitHub Stats** | `profile/github-stats.svg` | `495px` | `270px` | Stars, All-Time Contribs (`1,401`), 2026 Contribs (`931`), PRs, Merged %, Issues, Rank A Badge |
+| Card              | SVG File                    | Width   | Height  | Key Metrics Displayed                                                                              |
+| ----------------- | --------------------------- | ------- | ------- | -------------------------------------------------------------------------------------------------- |
+| **GitHub Stats**  | `profile/github-stats.svg`  | `495px` | `270px` | Stars, All-Time Contribs (`1,401`), 2026 Contribs (`931`), PRs, Merged %, Issues, Rank A Badge     |
 | **GitHub Streak** | `profile/github-streak.svg` | `495px` | `205px` | Hero Flame Badge, 1-Year Contribs (`1,301`), Current Streak (`8 days`), Longest Streak (`25 days`) |

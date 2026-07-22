@@ -11,6 +11,7 @@
 <br/>
 
 <!-- Social badges -->
+
 <a href="https://www.linkedin.com/in/biraj-sarkar"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
 <a href="https://x.com/birajdev2004"><img src="https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white" /></a>
 <a href="https://leetcode.com/u/biraj2004"><img src="https://img.shields.io/badge/LeetCode-FFA116?style=for-the-badge&logo=leetcode&logoColor=black" /></a>
@@ -19,13 +20,11 @@
 
 </div>
 
-
 ## Tech Stack
 
 <div align="center">
 <img src="https://skillicons.dev/icons?i=react,nextjs,ts,js,html,css,tailwind,nodejs,java,androidstudio,kotlin,spring,express,mongodb,postgres,python,cpp,git,github,githubactions,postman,vscode,figma,latex&perline=8" />
 </div>
-
 
 ## Developer Analytics (Live)
 
@@ -37,7 +36,9 @@
 
 </div>
 
-
+<div align="center">
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=Biraj2004&bg_color=0d1117&color=4ade80&line=4ade80&point=ffffff&border_color=30363d" width="100%" alt="Activity Graph"/>
+</div>
 
 <div align="center">
 
