@@ -555,7 +555,7 @@ function generateStreakSVG(stats) {
   aria-labelledby="descStreakId"
 >
   <title id="titleStreakId">Biraj Sarkar's GitHub Streak Stats</title>
-  <desc id="descStreakId">Total Contributions: ${stats.lastYearContribs}, Current Streak: ${stats.currentStreak} days, Longest Streak: ${stats.longestStreak} days</desc>
+  <desc id="descStreakId">Total Contributions (Last 1 Year): ${stats.lastYearContribs}, Current Streak: ${stats.currentStreak} days, Longest Streak: ${stats.longestStreak} days</desc>
   <style>
     .header {
       font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -565,6 +565,10 @@ function generateStreakSVG(stats) {
     .label {
       font: 600 13px 'Segoe UI', Ubuntu, Sans-Serif;
       fill: #c9d1d9;
+    }
+    .sublabel {
+      font: 500 11px 'Segoe UI', Ubuntu, Sans-Serif;
+      fill: #8b949e;
     }
     .val {
       font: 800 28px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -600,23 +604,26 @@ function generateStreakSVG(stats) {
 
   <!-- Left Stat: Total Contributions (Last 1 Year) -->
   <g transform="translate(95, 0)">
-    <text x="0" y="125" text-anchor="middle" class="label">Total Contributions</text>
-    <text x="0" y="175" text-anchor="middle" class="val">${stats.lastYearContribs}</text>
+    <text x="0" y="118" text-anchor="middle" class="label">Total Contributions</text>
+    <text x="0" y="135" text-anchor="middle" class="sublabel">(Last 1 Year)</text>
+    <text x="0" y="180" text-anchor="middle" class="val">${stats.lastYearContribs}</text>
   </g>
 
   <!-- Middle Stat: Current Streak with Flame Icon ABOVE -->
   <g transform="translate(247.5, 0)">
-    <svg class="fire-icon" x="-18" y="60" viewBox="0 0 16 16" width="36" height="36">
+    <svg class="fire-icon" x="-18" y="55" viewBox="0 0 16 16" width="36" height="36">
       <path d="M8 16c3.314 0 6-2.686 6-6 0-3.314-3-6-4.5-8.5C9 3 8 4.5 8 4.5S7 3 6.5 1.5C5 4 2 6.686 2 10c0 3.314 2.686 6 6 6zm0-2c-2.209 0-4-1.791-4-4 0-1.5 1.5-3.5 2.5-4.8.5.8 1.5 2 1.5 2s1-1.2 1.5-2c1 1.3 2.5 3.3 2.5 4.8 0 2.209-1.791 4-4 4z"/>
     </svg>
-    <text x="0" y="125" text-anchor="middle" class="label">Current Streak</text>
-    <text x="0" y="175" text-anchor="middle" class="accent-val">${stats.currentStreak} <tspan font-size="16" font-weight="600" fill="#c9d1d9">days</tspan></text>
+    <text x="0" y="118" text-anchor="middle" class="label">Current Streak</text>
+    <text x="0" y="135" text-anchor="middle" class="sublabel" fill="#4ade80">(Active)</text>
+    <text x="0" y="180" text-anchor="middle" class="accent-val">${stats.currentStreak} <tspan font-size="16" font-weight="600" fill="#c9d1d9">days</tspan></text>
   </g>
 
   <!-- Right Stat: Longest Streak -->
   <g transform="translate(400, 0)">
-    <text x="0" y="125" text-anchor="middle" class="label">Longest Streak</text>
-    <text x="0" y="175" text-anchor="middle" class="val">${stats.longestStreak} <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
+    <text x="0" y="118" text-anchor="middle" class="label">Longest Streak</text>
+    <text x="0" y="135" text-anchor="middle" class="sublabel">(All-Time)</text>
+    <text x="0" y="180" text-anchor="middle" class="val">${stats.longestStreak} <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
   </g>
 </svg>`;
 }
