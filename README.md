@@ -11,11 +11,11 @@
 <br/>
 
 <!-- Social badges -->
-<a href="https://www.linkedin.com/in/biraj-sarkar"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
-<a href="https://x.com/birajdev2004"><img src="https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white" /></a>
-<a href="https://leetcode.com/u/biraj2004"><img src="https://img.shields.io/badge/LeetCode-FFA116?style=for-the-badge&logo=leetcode&logoColor=black" /></a>
-<a href="https://iambiraj.vercel.app"><img src="https://img.shields.io/badge/Portfolio-0f172a?style=for-the-badge&logo=vercel&logoColor=4ade80" /></a>
-<a href="https://drive.google.com/uc?export=download&id=13hgIJbr5pHUZCUJJY_dr1HaW4QGiGWze"><img src="https://img.shields.io/badge/Resume-0f172a?style=for-the-badge&logo=adobeacrobatreader&logoColor=4ade80" /></a>
+<a href="https://www.linkedin.com/in/biraj-sarkar" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
+<a href="https://x.com/birajdev2004" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white" /></a>
+<a href="https://leetcode.com/u/biraj2004" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/LeetCode-FFA116?style=for-the-badge&logo=leetcode&logoColor=black" /></a>
+<a href="https://iambiraj.vercel.app" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Portfolio-0f172a?style=for-the-badge&logo=vercel&logoColor=4ade80" /></a>
+<a href="https://iambiraj.vercel.app/biraj-resume.pdf" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Resume-0f172a?style=for-the-badge&logo=adobeacrobatreader&logoColor=4ade80" /></a>
 
 </div>
 
