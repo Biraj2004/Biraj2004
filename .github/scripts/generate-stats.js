@@ -136,7 +136,6 @@ function calculateStreak(days) {
 async function getStats() {
   const currentYear = new Date().getFullYear();
   let totalCommits = 0;
-  let currentYearCommits = 0;
   let currentYearContribs = 0;
   let totalStars = 0;
   let totalPRs = 0;
@@ -217,12 +216,13 @@ async function getStats() {
             totalCommits += yrCommits;
             
             if (yr === currentYear) {
-              currentYearCommits = yrCommits;
               currentYearContribs = cc.contributionCalendar ? cc.contributionCalendar.totalContributions : yrCommits;
             }
 
             if (cc.contributionCalendar) {
-              totalCalendarContribs += cc.contributionCalendar.totalContributions || 0;
+              if (yr === currentYear || (new Date().getTime() - new Date(`${yr}-12-31`).getTime() < 365 * 86400 * 1000)) {
+                totalCalendarContribs += cc.contributionCalendar.totalContributions || 0;
+              }
               cc.contributionCalendar.weeks.forEach(w => {
                 allDays.push(...w.contributionDays);
               });
@@ -236,12 +236,19 @@ async function getStats() {
     }
   }
 
+  // Parse exact public contribution days from HTML if missing or for accuracy check
+  const publicDays = await fetchPublicContributions();
+  if (publicDays.length > 0) {
+    allDays = publicDays;
+    const year2026Days = publicDays.filter(d => d.date.startsWith(`${currentYear}`));
+    currentYearContribs = year2026Days.reduce((acc, d) => acc + d.contributionCount, 0);
+    totalCalendarContribs = publicDays.reduce((acc, d) => acc + d.contributionCount, 0);
+  }
+
   if (!graphQLSuccess) {
     console.log('Fetching metrics via REST API & HTML fallback...');
-    
     const searchCommits = await requestGitHub(`/search/commits?q=author:${USERNAME}`);
     totalCommits = searchCommits.total_count || 356;
-    currentYearCommits = 323;
 
     const repos = await requestGitHub(`/users/${USERNAME}/repos?per_page=100`);
     if (Array.isArray(repos)) {
@@ -260,16 +267,6 @@ async function getStats() {
     totalIssues = searchIssues.total_count || 1;
 
     contributedTo = 3;
-
-    // Fetch exact public contribution days from HTML
-    allDays = await fetchPublicContributions();
-    if (allDays.length > 0) {
-      totalCalendarContribs = allDays.reduce((acc, d) => acc + d.contributionCount, 0);
-      currentYearContribs = totalCalendarContribs;
-    } else {
-      totalCalendarContribs = totalCommits + totalPRs + totalIssues;
-      currentYearContribs = 323;
-    }
   }
 
   const mergedPct = totalPRs > 0 ? ((mergedPRs / totalPRs) * 100).toFixed(2) : '77.78';
@@ -287,7 +284,6 @@ async function getStats() {
   return {
     totalCommits,
     currentYear,
-    currentYearCommits,
     currentYearContribs,
     totalStars,
     totalPRs,

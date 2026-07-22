@@ -9,7 +9,6 @@ function fetchPublicContributions() {
       res.on('data', c => body += c);
       res.on('end', () => {
         const idToDate = {};
-        // Match td with id and data-date in any order
         const tdRegex = /<td[^>]*id="(contribution-day-component-[^"]+)"[^>]*>/g;
         let m;
         while ((m = tdRegex.exec(body)) !== null) {
@@ -46,49 +45,13 @@ function fetchPublicContributions() {
   });
 }
 
-function calculateStreak(days) {
-  let currentStreak = 0;
-  let longestStreak = 0;
-  let tempStreak = 0;
-
-  const sortedDays = [...days].sort((a, b) => new Date(a.date) - new Date(b.date));
-  const todayStr = new Date().toISOString().split('T')[0];
-
-  for (let i = 0; i < sortedDays.length; i++) {
-    const count = sortedDays[i].contributionCount;
-    if (count > 0) {
-      tempStreak++;
-      if (tempStreak > longestStreak) {
-        longestStreak = tempStreak;
-      }
-    } else {
-      tempStreak = 0;
-    }
-  }
-
-  let idx = sortedDays.length - 1;
-  if (idx >= 0 && sortedDays[idx].date === todayStr && sortedDays[idx].contributionCount === 0) {
-    idx--;
-  }
-
-  while (idx >= 0 && sortedDays[idx].contributionCount > 0) {
-    currentStreak++;
-    idx--;
-  }
-
-  return { currentStreak, longestStreak };
-}
-
-async function main() {
+async function run() {
   const days = await fetchPublicContributions();
-  console.log('Parsed days:', days.length);
-  const active = days.filter(d => d.contributionCount > 0);
-  console.log('Active days count:', active.length);
-  if (active.length > 0) {
-    console.log('Sample active day:', active[0]);
-  }
-  const streak = calculateStreak(days);
-  console.log('Calculated streak:', streak);
+  const year2026Days = days.filter(d => d.date.startsWith('2026'));
+  const year2026Total = year2026Days.reduce((acc, d) => acc + d.contributionCount, 0);
+  const totalLastYear = days.reduce((acc, d) => acc + d.contributionCount, 0);
+  console.log('2026 Contributions:', year2026Total);
+  console.log('Last 1 Year Contributions:', totalLastYear);
 }
 
-main();
+run();
