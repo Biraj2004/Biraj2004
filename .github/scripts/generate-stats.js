@@ -246,23 +246,25 @@ async function getStats() {
     }
   }
 
-  // Parse exact public contribution days across all years (2022 to currentYear)
-  let htmlAllDays = [];
-  let htmlAllTimeContribs = 0;
-  for (let yr = startYear; yr <= currentYear; yr++) {
-    const res = await fetchYearHTML(yr);
-    htmlAllTimeContribs += res.totalYear;
-    htmlAllDays.push(...res.days);
-    if (yr === currentYear) {
-      if (res.totalYear > 0) currentYearContribs = res.totalYear;
+  // If GraphQL wasn't available or returned empty, fetch exact public contribution days
+  if (!graphQLSuccess || allDays.length === 0) {
+    let htmlAllDays = [];
+    let htmlAllTimeContribs = 0;
+    for (let yr = startYear; yr <= currentYear; yr++) {
+      const res = await fetchYearHTML(yr);
+      htmlAllTimeContribs += res.totalYear;
+      htmlAllDays.push(...res.days);
+      if (yr === currentYear) {
+        if (res.totalYear > 0) currentYearContribs = res.totalYear;
+      }
     }
-  }
 
-  if (htmlAllTimeContribs > 0) {
-    allTimeContributions = htmlAllTimeContribs;
-  }
-  if (allDays.length === 0 && htmlAllDays.length > 0) {
-    allDays = htmlAllDays;
+    if (htmlAllTimeContribs > 0) {
+      allTimeContributions = htmlAllTimeContribs;
+    }
+    if (htmlAllDays.length > 0) {
+      allDays = htmlAllDays;
+    }
   }
 
   totalCalendarContribs = allTimeContributions > 0 ? allTimeContributions : 1401;
@@ -298,7 +300,6 @@ async function getStats() {
   else rank = 'B';
 
   const { currentStreak, longestStreak: calcLongest } = calculateStreak(allDays);
-  // Ensure private + public longest streak is included (minimum 25 days)
   const longestStreak = Math.max(calcLongest, 25);
 
   return {
