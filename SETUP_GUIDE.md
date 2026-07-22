@@ -29,8 +29,17 @@ The "Weekly Dev Breakdown" section is a placeholder until you connect WakaTime:
    `<!--START_SECTION:waka--> ... <!--END_SECTION:waka-->` markers already in the README.
 If you'd rather skip this, just delete that section — everything else works without it.
 
-## 4. Customize
+## 4. Include Private Repository Commits 🔒
+By default, the automated GitHub Action counts all public commits and private contribution events. To ensure ALL private repository commits across your GitHub account are included:
+1. Go to **GitHub Settings → Developer Settings → Personal Access Tokens → Tokens (classic)** (or Fine-grained tokens).
+2. Generate a token with the `repo` and `user` scopes (or `read:user`).
+3. Copy the token and go to your **`Biraj2004/Biraj2004` repository → Settings → Secrets and variables → Actions**.
+4. Click **New repository secret**, name it **`PAT_TOKEN`**, and paste your token value.
+5. On your main GitHub Profile page, click the **Contribution settings** dropdown (above the green contribution grid) and ensure **"Include private contributions"** is checked.
+
+## 5. Customize
 - Swap the `desc=` text in the top banner URL any time your role changes.
 - Trophy `title=` list controls which badges are prioritized first.
 - All colors are keyed to your signature `#4ade80` green accent for consistency with
   your portfolio (iambiraj.vercel.app).
+

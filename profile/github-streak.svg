@@ -1,0 +1,75 @@
+<svg
+  width="450"
+  height="270"
+  viewBox="0 0 450 270"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-labelledby="descStreakId"
+>
+  <title id="titleStreakId">Biraj Sarkar's GitHub Streak Stats</title>
+  <desc id="descStreakId">Total Contributions: 366, Current Streak: 0 days, Longest Streak: 0 days</desc>
+  <style>
+    .header {
+      font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
+      fill: #4ade80;
+      animation: fadeIn 0.8s ease-in-out forwards;
+    }
+    .label {
+      font: 600 13px 'Segoe UI', Ubuntu, Sans-Serif;
+      fill: #c9d1d9;
+    }
+    .val {
+      font: 800 24px 'Segoe UI', Ubuntu, Sans-Serif;
+      fill: #ffffff;
+    }
+    .accent-val {
+      font: 800 24px 'Segoe UI', Ubuntu, Sans-Serif;
+      fill: #4ade80;
+    }
+    .fire-icon {
+      fill: #4ade80;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+
+  <rect
+    x="0.5"
+    y="0.5"
+    rx="10"
+    height="99%"
+    stroke="#30363d"
+    width="449"
+    fill="#0d1117"
+  />
+
+  <g transform="translate(25, 35)">
+    <text x="0" y="0" class="header">GitHub Contribution Streak</text>
+  </g>
+
+  <g transform="translate(25, 95)">
+    <!-- Total Contributions Column -->
+    <g transform="translate(10, 0)">
+      <text x="0" y="0" class="label">Total Contributions</text>
+      <text x="0" y="32" class="val">366</text>
+    </g>
+
+    <!-- Current Streak Column -->
+    <g transform="translate(150, 0)">
+      <svg class="fire-icon" x="0" y="-18" viewBox="0 0 16 16" width="18" height="18">
+        <path d="M8 16c3.314 0 6-2.686 6-6 0-3.314-3-6-4.5-8.5C9 3 8 4.5 8 4.5S7 3 6.5 1.5C5 4 2 6.686 2 10c0 3.314 2.686 6 6 6zm0-2c-2.209 0-4-1.791-4-4 0-1.5 1.5-3.5 2.5-4.8.5.8 1.5 2 1.5 2s1-1.2 1.5-2c1 1.3 2.5 3.3 2.5 4.8 0 2.209-1.791 4-4 4z"/>
+      </svg>
+      <text x="24" y="0" class="label">Current Streak</text>
+      <text x="24" y="32" class="accent-val">0 <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
+    </g>
+
+    <!-- Longest Streak Column -->
+    <g transform="translate(290, 0)">
+      <text x="0" y="0" class="label">Longest Streak</text>
+      <text x="0" y="32" class="val">0 <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
+    </g>
+  </g>
+</svg>

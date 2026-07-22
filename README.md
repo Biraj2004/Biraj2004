@@ -21,48 +21,30 @@
 
 <br/>
 
-## About Me
-
-- 🔭 **Role**: Frontend Developer & QA Engineer @ [BrainLea (SRS Next Solve LLP)](https://brainlea.com)
-- 🎓 **Education**: B.Tech in ECE (2023–2027) @ Cooch Behar Government Engineering College (MAKAUT)
-- 💡 **Focus**: React.js, TypeScript, Node.js & Full-Stack Web Development
-- 🏆 **Community**: GDSC & CGEC Coding Club member | SIH 2024 Participant
-- ⚡ **Ask Me About**: React, Tailwind CSS, or debugging stubborn Supabase RLS policies
-- 🎮 **Fun Fact**: I run a gaming channel on the side & enjoy clean code documentation
-
-<br/>
-
 ## Tech Stack
 
 <div align="center">
 <img src="https://skillicons.dev/icons?i=react,nextjs,ts,js,nodejs,express,tailwind,html,css,mongodb,git,github,figma,vscode,python,cpp&perline=8" />
 </div>
 
-<br/>
 
 ## Developer Analytics (Live)
 
 <div align="center">
 
-<img height="245" src="https://github-readme-stats-two-nu.vercel.app/api?username=Biraj2004&show_icons=true&include_all_commits=true&count_private=true&show=prs_merged,prs_merged_percentage&bg_color=0d1117&title_color=4ade80&icon_color=4ade80&text_color=c9d1d9&border_color=30363d&border_radius=10&cache=false" alt="GitHub Stats" />
+<img height="270" src="profile/github-stats.svg" alt="GitHub Stats" />
 &nbsp;
-<img height="245" src="https://github-readme-streak-stats.herokuapp.com/?user=Biraj2004&background=0d1117&border=30363d&stroke=4ade80&ring=4ade80&fire=4ade80&currStreakNum=ffffff&currStreakLabel=4ade80&sideNums=ffffff&sideLabels=c9d1d9&dates=8b949e&border_radius=10" alt="GitHub Streak" />
+<img height="270" src="profile/github-streak.svg" alt="GitHub Streak" />
 
 </div>
-
-<br/>
 
 <div align="center">
 <img src="https://github-readme-activity-graph.vercel.app/graph?username=Biraj2004&bg_color=0d1117&color=4ade80&line=4ade80&point=ffffff&border_color=30363d" width="100%" alt="Activity Graph"/>
 </div>
 
-<br/>
-
 <div align="center">
 
 <img src="https://komarev.com/ghpvc/?username=Biraj2004&label=Profile%20Views&color=4ade80&style=for-the-badge" alt="profile views"/>
-
-<br/>
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:4ade80,100:0f172a&height=120&section=footer" />
 
