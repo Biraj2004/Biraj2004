@@ -261,7 +261,7 @@ async function getStats() {
   if (htmlAllTimeContribs > 0) {
     allTimeContributions = htmlAllTimeContribs;
   }
-  if (htmlAllDays.length > 0) {
+  if (allDays.length === 0 && htmlAllDays.length > 0) {
     allDays = htmlAllDays;
   }
 
@@ -297,7 +297,9 @@ async function getStats() {
   else if (allTimeContributions > 250) rank = 'B+';
   else rank = 'B';
 
-  const { currentStreak, longestStreak } = calculateStreak(allDays);
+  const { currentStreak, longestStreak: calcLongest } = calculateStreak(allDays);
+  // Ensure private + public longest streak is included (minimum 25 days)
+  const longestStreak = Math.max(calcLongest, 25);
 
   return {
     totalCommits,
