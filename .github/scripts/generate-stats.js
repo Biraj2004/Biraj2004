@@ -48,6 +48,51 @@ function requestGitHub(urlPath, method = 'GET', postData = null, extraHeaders = 
   });
 }
 
+function fetchPublicContributions() {
+  return new Promise((resolve) => {
+    https.get(`https://github.com/users/${USERNAME}/contributions`, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+    }, (res) => {
+      let body = '';
+      res.on('data', c => body += c);
+      res.on('end', () => {
+        const idToDate = {};
+        const tdRegex = /<td[^>]*id="(contribution-day-component-[^"]+)"[^>]*>/g;
+        let m;
+        while ((m = tdRegex.exec(body)) !== null) {
+          const tdStr = m[0];
+          const dateMatch = tdStr.match(/data-date="([^"]+)"/);
+          if (dateMatch) {
+            idToDate[m[1]] = dateMatch[1];
+          }
+        }
+
+        const dateCounts = {};
+        const tipRegex = /for="(contribution-day-component-[^"]+)"[^>]*>([^<]+)<\/tool-tip>/g;
+        while ((m = tipRegex.exec(body)) !== null) {
+          const id = m[1];
+          const text = m[2].trim();
+          const date = idToDate[id];
+          if (date) {
+            let count = 0;
+            if (!text.startsWith('No contribution')) {
+              const numMatch = text.match(/^([\d,]+)\s+contribution/);
+              if (numMatch) {
+                count = parseInt(numMatch[1].replace(/,/g, ''), 10);
+              }
+            }
+            dateCounts[date] = count;
+          }
+        }
+
+        const dates = Object.keys(dateCounts).sort();
+        const days = dates.map(d => ({ date: d, contributionCount: dateCounts[d] }));
+        resolve(days);
+      });
+    }).on('error', () => resolve([]));
+  });
+}
+
 async function fetchGraphQL(query, variables = {}) {
   const postData = JSON.stringify({ query, variables });
   const authHeader = TOKEN ? (TOKEN.startsWith('bearer ') ? TOKEN : `bearer ${TOKEN}`) : undefined;
@@ -187,17 +232,16 @@ async function getStats() {
         graphQLSuccess = true;
       }
     } catch (e) {
-      console.warn('GraphQL fetch failed, falling back to REST API:', e.message);
+      console.warn('GraphQL fetch failed, falling back to REST API & HTML parser:', e.message);
     }
   }
 
   if (!graphQLSuccess) {
-    console.log('Fetching metrics via REST API fallback...');
+    console.log('Fetching metrics via REST API & HTML fallback...');
     
     const searchCommits = await requestGitHub(`/search/commits?q=author:${USERNAME}`);
     totalCommits = searchCommits.total_count || 356;
     currentYearCommits = 323;
-    currentYearContribs = 323;
 
     const repos = await requestGitHub(`/users/${USERNAME}/repos?per_page=100`);
     if (Array.isArray(repos)) {
@@ -216,7 +260,16 @@ async function getStats() {
     totalIssues = searchIssues.total_count || 1;
 
     contributedTo = 3;
-    totalCalendarContribs = totalCommits + totalPRs + totalIssues;
+
+    // Fetch exact public contribution days from HTML
+    allDays = await fetchPublicContributions();
+    if (allDays.length > 0) {
+      totalCalendarContribs = allDays.reduce((acc, d) => acc + d.contributionCount, 0);
+      currentYearContribs = totalCalendarContribs;
+    } else {
+      totalCalendarContribs = totalCommits + totalPRs + totalIssues;
+      currentYearContribs = 323;
+    }
   }
 
   const mergedPct = totalPRs > 0 ? ((mergedPRs / totalPRs) * 100).toFixed(2) : '77.78';
@@ -423,8 +476,8 @@ function generateStatsSVG(stats) {
 function generateStreakSVG(stats) {
   return `<svg
   width="450"
-  height="270"
-  viewBox="0 0 450 270"
+  height="195"
+  viewBox="0 0 450 195"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   role="img"
@@ -473,7 +526,7 @@ function generateStreakSVG(stats) {
     <text x="0" y="0" class="header">GitHub Contribution Streak</text>
   </g>
 
-  <g transform="translate(25, 95)">
+  <g transform="translate(25, 85)">
     <!-- Total Contributions Column -->
     <g transform="translate(10, 0)">
       <text x="0" y="0" class="label">Total Contributions</text>

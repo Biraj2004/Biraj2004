@@ -19,7 +19,6 @@
 
 </div>
 
-<br/>
 
 ## Tech Stack
 
@@ -43,6 +42,8 @@
 </div>
 
 <div align="center">
+
+<br/>
 
 <img src="https://komarev.com/ghpvc/?username=Biraj2004&label=Profile%20Views&color=4ade80&style=for-the-badge" alt="profile views"/>
 
