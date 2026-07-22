@@ -1,7 +1,7 @@
 <svg
   width="450"
-  height="270"
-  viewBox="0 0 450 270"
+  height="165"
+  viewBox="0 0 450 165"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   role="img"
@@ -40,17 +40,17 @@
     x="0.5"
     y="0.5"
     rx="10"
-    height="269"
+    height="164"
     stroke="#30363d"
     width="449"
     fill="#0d1117"
   />
 
-  <g transform="translate(25, 45)">
+  <g transform="translate(25, 35)">
     <text x="0" y="0" class="header">GitHub Contribution Streak</text>
   </g>
 
-  <g transform="translate(25, 125)">
+  <g transform="translate(25, 80)">
     <!-- Total Contributions Column -->
     <g transform="translate(10, 0)">
       <text x="0" y="0" class="label">Total Contributions</text>

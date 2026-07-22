@@ -109,7 +109,6 @@ function calculateStreak(days) {
   const map = {};
   days.forEach(d => { map[d.date] = d.contributionCount; });
 
-  // Exclude future dates beyond today (UTC) to prevent 0 streak bug
   const todayStr = new Date().toISOString().split('T')[0];
   const sortedDates = Object.keys(map).filter(d => d <= todayStr).sort();
   const sortedDays = sortedDates.map(d => ({ date: d, contributionCount: map[d] }));
@@ -131,7 +130,6 @@ function calculateStreak(days) {
   }
 
   let idx = sortedDays.length - 1;
-  // If today has 0 contributions so far, check if yesterday had contributions to keep streak active
   if (idx >= 0 && sortedDays[idx].date === todayStr && sortedDays[idx].contributionCount === 0) {
     idx--;
   }
@@ -493,8 +491,8 @@ function generateStatsSVG(stats) {
 function generateStreakSVG(stats) {
   return `<svg
   width="450"
-  height="270"
-  viewBox="0 0 450 270"
+  height="165"
+  viewBox="0 0 450 165"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   role="img"
@@ -533,17 +531,17 @@ function generateStreakSVG(stats) {
     x="0.5"
     y="0.5"
     rx="10"
-    height="269"
+    height="164"
     stroke="#30363d"
     width="449"
     fill="#0d1117"
   />
 
-  <g transform="translate(25, 45)">
+  <g transform="translate(25, 35)">
     <text x="0" y="0" class="header">GitHub Contribution Streak</text>
   </g>
 
-  <g transform="translate(25, 125)">
+  <g transform="translate(25, 80)">
     <!-- Total Contributions Column -->
     <g transform="translate(10, 0)">
       <text x="0" y="0" class="label">Total Contributions</text>
