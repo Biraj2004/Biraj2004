@@ -4,7 +4,7 @@ This repository contains a **100% self-hosted, automated profile analytics engin
 
 ---
 
-## 🚀 How It Works
+## How It Works
 
 1. **Self-Hosted Generator Script** (`.github/scripts/generate-stats.js`):
    - Queries GitHub's GraphQL & REST APIs.
@@ -17,7 +17,7 @@ This repository contains a **100% self-hosted, automated profile analytics engin
 
 ---
 
-## 🔒 Step-by-Step Setup Guide
+## Step-by-Step Setup Guide
 
 ### Step 1: Create & Save Your GitHub `PAT_TOKEN`
 To include private repository commits, issues, and PRs in your contribution counts and streak calculations:
@@ -54,7 +54,7 @@ To include private repository commits, issues, and PRs in your contribution coun
 
 ---
 
-## 🛠️ Customization & Tech Stack Icons
+## Customization & Tech Stack Icons
 
 ### Tech Stack Grid (`README.md`)
 The README features 24 skill icons formatted into 3 perfectly balanced rows (8 icons per row):
@@ -70,7 +70,7 @@ The README features 24 skill icons formatted into 3 perfectly balanced rows (8 i
 
 ---
 
-## 💻 Local Execution (Optional)
+## Local Execution (Optional)
 
 If you want to run the generator script locally on your machine:
 
@@ -86,7 +86,7 @@ The script will generate local copies under `profile/github-stats.svg` and `prof
 
 ---
 
-## 📊 Card Dimension & Layout Specifications
+## Card Dimension & Layout Specifications
 
 | Card | SVG File | Width | Height | Key Metrics Displayed |
 |---|---|---|---|---|
