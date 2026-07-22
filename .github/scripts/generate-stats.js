@@ -493,9 +493,9 @@ function generateStatsSVG(stats) {
 
 function generateStreakSVG(stats) {
   return `<svg
-  width="450"
-  height="165"
-  viewBox="0 0 450 165"
+  width="495"
+  height="270"
+  viewBox="0 0 495 270"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   role="img"
@@ -514,11 +514,11 @@ function generateStreakSVG(stats) {
       fill: #c9d1d9;
     }
     .val {
-      font: 800 24px 'Segoe UI', Ubuntu, Sans-Serif;
+      font: 800 26px 'Segoe UI', Ubuntu, Sans-Serif;
       fill: #ffffff;
     }
     .accent-val {
-      font: 800 24px 'Segoe UI', Ubuntu, Sans-Serif;
+      font: 800 32px 'Segoe UI', Ubuntu, Sans-Serif;
       fill: #4ade80;
     }
     .fire-icon {
@@ -534,37 +534,36 @@ function generateStreakSVG(stats) {
     x="0.5"
     y="0.5"
     rx="10"
-    height="164"
+    height="269"
     stroke="#30363d"
-    width="449"
+    width="494"
     fill="#0d1117"
   />
 
-  <g transform="translate(25, 35)">
+  <!-- Title -->
+  <g transform="translate(25, 40)">
     <text x="0" y="0" class="header">GitHub Contribution Streak</text>
   </g>
 
-  <g transform="translate(25, 80)">
-    <!-- Total Contributions Column -->
-    <g transform="translate(10, 0)">
-      <text x="0" y="0" class="label">Total Contributions</text>
-      <text x="0" y="32" class="val">${stats.totalCalendarContribs}</text>
-    </g>
+  <!-- Centered Hero Flame & Current Streak -->
+  <g transform="translate(247, 95)">
+    <svg class="fire-icon" x="-18" y="-28" viewBox="0 0 16 16" width="36" height="36">
+      <path d="M8 16c3.314 0 6-2.686 6-6 0-3.314-3-6-4.5-8.5C9 3 8 4.5 8 4.5S7 3 6.5 1.5C5 4 2 6.686 2 10c0 3.314 2.686 6 6 6zm0-2c-2.209 0-4-1.791-4-4 0-1.5 1.5-3.5 2.5-4.8.5.8 1.5 2 1.5 2s1-1.2 1.5-2c1 1.3 2.5 3.3 2.5 4.8 0 2.209-1.791 4-4 4z"/>
+    </svg>
+    <text x="0" y="24" text-anchor="middle" class="accent-val">${stats.currentStreak} <tspan font-size="16" font-weight="600" fill="#c9d1d9">days</tspan></text>
+    <text x="0" y="48" text-anchor="middle" class="label">Current Streak</text>
+  </g>
 
-    <!-- Current Streak Column -->
-    <g transform="translate(150, 0)">
-      <svg class="fire-icon" x="0" y="-18" viewBox="0 0 16 16" width="18" height="18">
-        <path d="M8 16c3.314 0 6-2.686 6-6 0-3.314-3-6-4.5-8.5C9 3 8 4.5 8 4.5S7 3 6.5 1.5C5 4 2 6.686 2 10c0 3.314 2.686 6 6 6zm0-2c-2.209 0-4-1.791-4-4 0-1.5 1.5-3.5 2.5-4.8.5.8 1.5 2 1.5 2s1-1.2 1.5-2c1 1.3 2.5 3.3 2.5 4.8 0 2.209-1.791 4-4 4z"/>
-      </svg>
-      <text x="24" y="0" class="label">Current Streak</text>
-      <text x="24" y="32" class="accent-val">${stats.currentStreak} <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
-    </g>
+  <!-- Left Stat: Total Contributions -->
+  <g transform="translate(85, 150)">
+    <text x="0" y="0" text-anchor="middle" class="label">Total Contributions</text>
+    <text x="0" y="32" text-anchor="middle" class="val">${stats.totalCalendarContribs}</text>
+  </g>
 
-    <!-- Longest Streak Column -->
-    <g transform="translate(290, 0)">
-      <text x="0" y="0" class="label">Longest Streak</text>
-      <text x="0" y="32" class="val">${stats.longestStreak} <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
-    </g>
+  <!-- Right Stat: Longest Streak -->
+  <g transform="translate(410, 150)">
+    <text x="0" y="0" text-anchor="middle" class="label">Longest Streak</text>
+    <text x="0" y="32" text-anchor="middle" class="val">${stats.longestStreak} <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
   </g>
 </svg>`;
 }
