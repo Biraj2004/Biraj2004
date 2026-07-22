@@ -98,6 +98,55 @@ function fetchYearHTML(year) {
   });
 }
 
+function fetchRecentHTML() {
+  return new Promise((resolve) => {
+    https.get(`https://github.com/users/${USERNAME}/contributions`, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+    }, (res) => {
+      let body = '';
+      res.on('data', c => body += c);
+      res.on('end', () => {
+        const match = body.match(/([\d,]+)\s+contributions\s+in\s+the\s+last\s+year/i);
+        const lastYearTotal = match ? parseInt(match[1].replace(/,/g, ''), 10) : 1286;
+        
+        const idToDate = {};
+        const tdRegex = /<td[^>]*id="(contribution-day-component-[^"]+)"[^>]*>/g;
+        let m;
+        while ((m = tdRegex.exec(body)) !== null) {
+          const tdStr = m[0];
+          const dateMatch = tdStr.match(/data-date="([^"]+)"/);
+          if (dateMatch) {
+            idToDate[m[1]] = dateMatch[1];
+          }
+        }
+
+        const dateCounts = {};
+        const tipRegex = /for="(contribution-day-component-[^"]+)"[^>]*>([^<]+)<\/tool-tip>/g;
+        while ((m = tipRegex.exec(body)) !== null) {
+          const id = m[1];
+          const text = m[2].trim();
+          const date = idToDate[id];
+          if (date) {
+            let count = 0;
+            if (!text.startsWith('No contribution')) {
+              const numMatch = text.match(/^([\d,]+)\s+contribution/);
+              if (numMatch) {
+                count = parseInt(numMatch[1].replace(/,/g, ''), 10);
+              }
+            }
+            dateCounts[date] = count;
+          }
+        }
+
+        const dates = Object.keys(dateCounts).sort();
+        const days = dates.map(d => ({ date: d, contributionCount: dateCounts[d] }));
+
+        resolve({ lastYearTotal, days });
+      });
+    }).on('error', () => resolve({ lastYearTotal: 1286, days: [] }));
+  });
+}
+
 async function fetchGraphQL(query, variables = {}) {
   const postData = JSON.stringify({ query, variables });
   const authHeader = TOKEN ? (TOKEN.startsWith('bearer ') ? TOKEN : `bearer ${TOKEN}`) : undefined;
@@ -154,7 +203,7 @@ async function getStats() {
   let contributedTo = 0;
   let startYear = 2022;
   let allDays = [];
-  let totalCalendarContribs = 1401;
+  let lastYearContribs = 1286;
 
   let graphQLSuccess = false;
 
@@ -246,6 +295,12 @@ async function getStats() {
     }
   }
 
+  // Fetch last 1 year contributions from HTML / recent activity graph
+  const recentHtml = await fetchRecentHTML();
+  if (recentHtml.lastYearTotal > 0) {
+    lastYearContribs = recentHtml.lastYearTotal;
+  }
+
   // If GraphQL wasn't available or returned empty, fetch exact public contribution days
   if (!graphQLSuccess || allDays.length === 0) {
     let htmlAllDays = [];
@@ -266,8 +321,6 @@ async function getStats() {
       allDays = htmlAllDays;
     }
   }
-
-  totalCalendarContribs = allTimeContributions > 0 ? allTimeContributions : 1401;
 
   if (!graphQLSuccess) {
     console.log('Fetching metrics via REST API & HTML fallback...');
@@ -307,6 +360,7 @@ async function getStats() {
     allTimeContributions,
     currentYear,
     currentYearContribs,
+    lastYearContribs,
     totalStars,
     totalPRs,
     mergedPRs,
@@ -314,7 +368,6 @@ async function getStats() {
     totalIssues,
     contributedTo,
     rank,
-    totalCalendarContribs,
     currentStreak,
     longestStreak
   };
@@ -502,7 +555,7 @@ function generateStreakSVG(stats) {
   aria-labelledby="descStreakId"
 >
   <title id="titleStreakId">Biraj Sarkar's GitHub Streak Stats</title>
-  <desc id="descStreakId">Total Contributions: ${stats.totalCalendarContribs}, Current Streak: ${stats.currentStreak} days, Longest Streak: ${stats.longestStreak} days</desc>
+  <desc id="descStreakId">Total Contributions: ${stats.lastYearContribs}, Current Streak: ${stats.currentStreak} days, Longest Streak: ${stats.longestStreak} days</desc>
   <style>
     .header {
       font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -514,11 +567,11 @@ function generateStreakSVG(stats) {
       fill: #c9d1d9;
     }
     .val {
-      font: 800 26px 'Segoe UI', Ubuntu, Sans-Serif;
+      font: 800 28px 'Segoe UI', Ubuntu, Sans-Serif;
       fill: #ffffff;
     }
     .accent-val {
-      font: 800 32px 'Segoe UI', Ubuntu, Sans-Serif;
+      font: 800 28px 'Segoe UI', Ubuntu, Sans-Serif;
       fill: #4ade80;
     }
     .fire-icon {
@@ -545,25 +598,25 @@ function generateStreakSVG(stats) {
     <text x="0" y="0" class="header">GitHub Contribution Streak</text>
   </g>
 
-  <!-- Left Stat: Total Contributions -->
+  <!-- Left Stat: Total Contributions (Last 1 Year) -->
   <g transform="translate(95, 0)">
-    <text x="0" y="136" text-anchor="middle" class="val">${stats.totalCalendarContribs}</text>
-    <text x="0" y="166" text-anchor="middle" class="label">Total Contributions</text>
+    <text x="0" y="125" text-anchor="middle" class="label">Total Contributions</text>
+    <text x="0" y="175" text-anchor="middle" class="val">${stats.lastYearContribs}</text>
   </g>
 
   <!-- Middle Stat: Current Streak with Flame Icon ABOVE -->
   <g transform="translate(247.5, 0)">
-    <svg class="fire-icon" x="-18" y="78" viewBox="0 0 16 16" width="36" height="36">
+    <svg class="fire-icon" x="-18" y="60" viewBox="0 0 16 16" width="36" height="36">
       <path d="M8 16c3.314 0 6-2.686 6-6 0-3.314-3-6-4.5-8.5C9 3 8 4.5 8 4.5S7 3 6.5 1.5C5 4 2 6.686 2 10c0 3.314 2.686 6 6 6zm0-2c-2.209 0-4-1.791-4-4 0-1.5 1.5-3.5 2.5-4.8.5.8 1.5 2 1.5 2s1-1.2 1.5-2c1 1.3 2.5 3.3 2.5 4.8 0 2.209-1.791 4-4 4z"/>
     </svg>
-    <text x="0" y="140" text-anchor="middle" class="accent-val">${stats.currentStreak} <tspan font-size="16" font-weight="600" fill="#c9d1d9">days</tspan></text>
-    <text x="0" y="166" text-anchor="middle" class="label">Current Streak</text>
+    <text x="0" y="125" text-anchor="middle" class="label">Current Streak</text>
+    <text x="0" y="175" text-anchor="middle" class="accent-val">${stats.currentStreak} <tspan font-size="16" font-weight="600" fill="#c9d1d9">days</tspan></text>
   </g>
 
   <!-- Right Stat: Longest Streak -->
   <g transform="translate(400, 0)">
-    <text x="0" y="136" text-anchor="middle" class="val">${stats.longestStreak} <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
-    <text x="0" y="166" text-anchor="middle" class="label">Longest Streak</text>
+    <text x="0" y="125" text-anchor="middle" class="label">Longest Streak</text>
+    <text x="0" y="175" text-anchor="middle" class="val">${stats.longestStreak} <tspan font-size="14" font-weight="600" fill="#c9d1d9">days</tspan></text>
   </g>
 </svg>`;
 }
