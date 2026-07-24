@@ -376,7 +376,7 @@ async function getStats() {
   else rank = 'B';
 
   const { currentStreak, longestStreak: calcLongest } = calculateStreak(allDays);
-  const longestStreak = Math.max(calcLongest, 25);
+  const longestStreak = Math.max(calcLongest, currentStreak);
 
   return {
     totalCommits,
