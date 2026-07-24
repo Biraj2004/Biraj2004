@@ -31,9 +31,9 @@
 
 <div align="center">
 
-<img height="270" src="profile/github-stats.svg" alt="GitHub Stats" />
+<img height="270" src="./profile/github-stats.svg" alt="GitHub Stats" />
 &nbsp;
-<img height="205" src="profile/github-streak.svg" alt="GitHub Streak" />
+<img height="205" src="./profile/github-streak.svg" alt="GitHub Streak" />
 
 </div>
 
