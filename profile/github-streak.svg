@@ -8,7 +8,11 @@
   aria-labelledby="descStreakId"
 >
   <title id="titleStreakId">Biraj Sarkar's GitHub Streak Stats</title>
+<<<<<<< HEAD
   <desc id="descStreakId">Total Contributions (Last 1 Year): 1315, Current Streak: 10 days, Longest Streak: 25 days</desc>
+=======
+  <desc id="descStreakId">Total Contributions (Last 1 Year): 1301, Current Streak: 10 days, Longest Streak: 25 days</desc>
+>>>>>>> 7de3a909a301044ff117170e0973b1f32b43f92c
   <style>
     .header {
       font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
