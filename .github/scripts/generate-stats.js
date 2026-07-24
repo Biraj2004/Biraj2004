@@ -295,6 +295,9 @@ async function getStats() {
     }
   }
 
+  // Fetch recent HTML to get live last 1 year contribution total & recent days
+  const recentHTMLData = await fetchRecentHTML();
+
   // If GraphQL wasn't available or returned empty, fetch exact public contribution days
   if (!graphQLSuccess || allDays.length === 0) {
     let htmlAllDays = [];
@@ -316,7 +319,17 @@ async function getStats() {
     }
   }
 
-  // Compute exact rolling 365-day contributions from allDays (includes private repos when authenticated)
+  // Merge recentHTMLData days into allDays to ensure up-to-date daily counts
+  const dayMap = {};
+  allDays.forEach(d => { dayMap[d.date] = d.contributionCount; });
+  if (recentHTMLData && Array.isArray(recentHTMLData.days)) {
+    recentHTMLData.days.forEach(d => {
+      dayMap[d.date] = d.contributionCount;
+    });
+  }
+  allDays = Object.keys(dayMap).sort().map(d => ({ date: d, contributionCount: dayMap[d] }));
+
+  // Compute exact rolling 365-day contributions from allDays
   const today = new Date();
   const oneYearAgo = new Date(today);
   oneYearAgo.setDate(oneYearAgo.getDate() - 365);
@@ -326,10 +339,10 @@ async function getStats() {
   const recent365Days = allDays.filter(d => d.date >= oneYearAgoStr && d.date <= todayStr);
   const computed365Contribs = recent365Days.reduce((acc, d) => acc + d.contributionCount, 0);
 
-  if (computed365Contribs > 0) {
-    lastYearContribs = Math.max(computed365Contribs, 1301);
+  if (recentHTMLData && recentHTMLData.lastYearTotal > 0) {
+    lastYearContribs = Math.max(recentHTMLData.lastYearTotal, computed365Contribs);
   } else {
-    lastYearContribs = 1301;
+    lastYearContribs = computed365Contribs;
   }
 
   if (!graphQLSuccess) {
