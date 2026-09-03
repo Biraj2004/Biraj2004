@@ -35,14 +35,6 @@
 &nbsp;
 <img height="205" src="https://raw.githubusercontent.com/Biraj2004/Biraj2004/main/profile/github-streak.svg" alt="GitHub Streak" />
 
-</div>
-
-<div align="center">
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=Biraj2004&bg_color=0d1117&color=4ade80&line=4ade80&point=ffffff&border_color=30363d" width="100%" alt="Activity Graph"/>
-</div>
-
-<div align="center">
-
 <br/>
 
 <img src="https://komarev.com/ghpvc/?username=Biraj2004&label=Profile%20Views&color=4ade80&style=for-the-badge" alt="profile views"/>
