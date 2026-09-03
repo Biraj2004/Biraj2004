@@ -11,8 +11,8 @@ This repository contains a **100% self-hosted, automated profile analytics engin
    - Calculates **All-Time Contributions (`1,401`)**, **Current Year Contributions (`931`)**, **Rolling 1-Year Contributions (`1,301`)**, **Current Streak (`8 days`)**, **Longest Streak (`25 days`)**, PRs, Issues, and Stars.
    - Renders custom SVG vector cards matching your signature `#4ade80` emerald green theme.
 
-2. **Automated 6-Hour Workflow** (`.github/workflows/stats.yml`):
-   - Runs automatically on a 6-hour cron schedule (`0 */6 * * *`) and on every push to `main`.
+2. **Automated 2-Hour Workflow** (`.github/workflows/stats.yml`):
+   - Runs automatically on a 2-hour cron schedule (`0 */2 * * *`) and on every push to `main`.
    - Commits updated SVGs directly to `main` so your GitHub Profile README updates live 24/7.
 
 ---

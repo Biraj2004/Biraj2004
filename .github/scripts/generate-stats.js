@@ -295,15 +295,25 @@ async function getStats() {
     }
   }
 
-  // Fetch recent HTML to get live last 1 year contribution total & recent days
-  const recentHTMLData = await fetchRecentHTML();
+  // Fetch recent HTML and current year HTML to get live contribution totals matching GitHub profile UI
+  const [recentHTMLData, currentYearHTML] = await Promise.all([
+    fetchRecentHTML(),
+    fetchYearHTML(currentYear)
+  ]);
+
+  if (currentYearHTML && currentYearHTML.totalYear > 0) {
+    if (currentYearContribs > 0) {
+      allTimeContributions += Math.max(0, currentYearHTML.totalYear - currentYearContribs);
+    }
+    currentYearContribs = Math.max(currentYearContribs, currentYearHTML.totalYear);
+  }
 
   // If GraphQL wasn't available or returned empty, fetch exact public contribution days
   if (!graphQLSuccess || allDays.length === 0) {
     let htmlAllDays = [];
     let htmlAllTimeContribs = 0;
     for (let yr = startYear; yr <= currentYear; yr++) {
-      const res = await fetchYearHTML(yr);
+      const res = (yr === currentYear && currentYearHTML) ? currentYearHTML : await fetchYearHTML(yr);
       htmlAllTimeContribs += res.totalYear;
       htmlAllDays.push(...res.days);
       if (yr === currentYear) {
@@ -319,9 +329,14 @@ async function getStats() {
     }
   }
 
-  // Merge recentHTMLData days into allDays to ensure up-to-date daily counts
+  // Merge recentHTMLData and currentYearHTML days into allDays to ensure up-to-date daily counts
   const dayMap = {};
   allDays.forEach(d => { dayMap[d.date] = d.contributionCount; });
+  if (currentYearHTML && Array.isArray(currentYearHTML.days)) {
+    currentYearHTML.days.forEach(d => {
+      dayMap[d.date] = d.contributionCount;
+    });
+  }
   if (recentHTMLData && Array.isArray(recentHTMLData.days)) {
     recentHTMLData.days.forEach(d => {
       dayMap[d.date] = d.contributionCount;
@@ -349,9 +364,9 @@ async function getStats() {
     console.log('Fetching metrics via REST API & HTML fallback...');
     const repos = await requestGitHub(`/users/${USERNAME}/repos?per_page=100`);
     if (Array.isArray(repos)) {
-      totalStars = repos.reduce((acc, r) => acc + (r.stargazers_count || 0), 0);
+      totalStars = repos.filter(r => !r.fork).reduce((acc, r) => acc + (r.stargazers_count || 0), 0);
     } else {
-      totalStars = 39;
+      totalStars = 35;
     }
 
     const searchPRs = await requestGitHub(`/search/issues?q=author:${USERNAME}+type:pr`);
@@ -363,7 +378,7 @@ async function getStats() {
     const searchIssues = await requestGitHub(`/search/issues?q=author:${USERNAME}+type:issue`);
     totalIssues = searchIssues.total_count || 1;
 
-    contributedTo = 3;
+    contributedTo = 6;
   }
 
   const mergedPct = totalPRs > 0 ? ((mergedPRs / totalPRs) * 100).toFixed(2) : '77.78';
