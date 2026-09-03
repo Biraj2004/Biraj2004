@@ -362,23 +362,32 @@ async function getStats() {
 
   if (!graphQLSuccess) {
     console.log('Fetching metrics via REST API & HTML fallback...');
-    const repos = await requestGitHub(`/users/${USERNAME}/repos?per_page=100`);
-    if (Array.isArray(repos)) {
-      totalStars = repos.filter(r => !r.fork).reduce((acc, r) => acc + (r.stargazers_count || 0), 0);
-    } else {
-      totalStars = 35;
+    try {
+      const repos = await requestGitHub(`/users/${USERNAME}/repos?per_page=100`);
+      if (Array.isArray(repos)) {
+        totalStars = repos.filter(r => !r.fork).reduce((acc, r) => acc + (r.stargazers_count || 0), 0);
+      } else {
+        totalStars = 35;
+      }
+
+      const searchPRs = await requestGitHub(`/search/issues?q=author:${USERNAME}+type:pr`);
+      totalPRs = searchPRs?.total_count ?? 9;
+
+      const searchMergedPRs = await requestGitHub(`/search/issues?q=author:${USERNAME}+type:pr+is:merged`);
+      mergedPRs = searchMergedPRs?.total_count ?? 7;
+
+      const searchIssues = await requestGitHub(`/search/issues?q=author:${USERNAME}+type:issue`);
+      totalIssues = searchIssues?.total_count ?? 1;
+
+      contributedTo = 6;
+    } catch (e) {
+      console.warn('REST API fallback encountered an issue, using defaults:', e.message);
+      totalStars = totalStars || 35;
+      totalPRs = totalPRs || 9;
+      mergedPRs = mergedPRs || 7;
+      totalIssues = totalIssues || 1;
+      contributedTo = contributedTo || 6;
     }
-
-    const searchPRs = await requestGitHub(`/search/issues?q=author:${USERNAME}+type:pr`);
-    totalPRs = searchPRs.total_count || 9;
-
-    const searchMergedPRs = await requestGitHub(`/search/issues?q=author:${USERNAME}+type:pr+is:merged`);
-    mergedPRs = searchMergedPRs.total_count || 7;
-
-    const searchIssues = await requestGitHub(`/search/issues?q=author:${USERNAME}+type:issue`);
-    totalIssues = searchIssues.total_count || 1;
-
-    contributedTo = 6;
   }
 
   const mergedPct = totalPRs > 0 ? ((mergedPRs / totalPRs) * 100).toFixed(2) : '77.78';
